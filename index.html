@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Дом-музей п. Николаевка — виртуальный тур</title>
+<meta name="description" content="Виртуальный тур по Дому-музею п. Николаевка: пять залов, экспонаты, описания и аудиогид.">
+
+<style>
+:root{
+  --bg:#100e0c; --panel:#1a1714; --panel-2:#221e19; --line:#332c24;
+  --gold:#c9a24a; --gold-soft:#e0c07a; --text:#f3eee3;
+  --muted:#b4a89a; --dim:#7d7266;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:"Segoe UI","Helvetica Neue",system-ui,-apple-system,Roboto,Arial,sans-serif;
+  font-weight:300; line-height:1.7; letter-spacing:.005em;
+  min-height:100vh; display:flex; flex-direction:column;
+}
+.site-header{
+  position:sticky; top:0; z-index:50;
+  display:flex; align-items:center; justify-content:space-between; gap:20px;
+  padding:14px 28px; background:rgba(16,14,12,.86);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.logo{
+  display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text);
+  font-family:Georgia,"Times New Roman",serif; font-size:17px;
+  letter-spacing:.03em; white-space:nowrap;
+}
+.logo__mark{color:var(--gold); font-size:20px}
+.logo b{color:var(--gold-soft); font-weight:500}
+.nav{display:flex; gap:6px; flex-wrap:wrap}
+.nav a{
+  color:var(--muted); text-decoration:none; font-size:14px; font-weight:300;
+  letter-spacing:.04em; padding:8px 15px; border-radius:999px;
+  border:1px solid transparent; transition:.2s; white-space:nowrap;
+}
+.nav a:hover{color:var(--text); background:var(--panel)}
+.nav a.active{
+  color:#1a1408; font-weight:500;
+  background:linear-gradient(135deg,var(--gold-soft),var(--gold));
+}
+.burger{
+  display:none; background:none; border:1px solid var(--line);
+  color:var(--text); font-size:19px; border-radius:10px;
+  padding:3px 12px; cursor:pointer;
+}
+main{
+  flex:1; width:100%; max-width:1200px;
+  margin:0 auto; padding:36px 28px 70px;
+}
+.page-hero{
+  margin-bottom:34px; padding-bottom:24px;
+  border-bottom:1px solid var(--line);
+  animation:fade .45s ease both;
+}
+.page-hero h1{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(28px,4vw,46px); font-weight:400;
+  letter-spacing:.005em; margin:0 0 14px;
+}
+.page-hero p{color:var(--muted); max-width:72ch; margin:0; font-size:16px}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.grid{
+  display:grid; gap:24px;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+}
+.card{
+  display:flex; flex-direction:column; overflow:hidden;
+  border:1px solid var(--line); border-radius:16px;
+  background:linear-gradient(180deg,var(--panel),var(--panel-2));
+  transition:transform .25s, border-color .25s, box-shadow .25s;
+}
+.card:hover{
+  transform:translateY(-4px); border-color:#4a3f2e;
+  box-shadow:0 20px 44px -22px rgba(0,0,0,.95);
+}
+.card--hall{text-decoration:none; color:inherit; cursor:pointer}
+.card--hall .card__cta{
+  display:inline-flex; align-items:center; gap:6px;
+  margin-top:4px; padding-top:13px; border-top:1px dashed var(--line);
+  color:var(--gold); font-size:12px; letter-spacing:.14em;
+  text-transform:uppercase; font-weight:400; transition:color .2s, gap .2s;
+}
+.card--hall:hover .card__cta{color:var(--gold-soft); gap:10px}
+.card__visual{
+  position:relative; aspect-ratio:16/10;
+  display:grid; place-items:center; font-size:64px; line-height:1;
+  border-bottom:1px solid var(--line); overflow:hidden;
+  background:radial-gradient(circle at 30% 25%, rgba(201,162,74,.22), transparent 62%), #0d0b0a;
+}
+.card__visual img{
+  width:100%; height:100%; object-fit:cover; display:block;
+  transition:transform .4s ease;
+}
+.card:hover .card__visual img{transform:scale(1.04)}
+.card__body{
+  padding:18px 20px 22px; display:flex; flex-direction:column;
+  gap:12px; flex:1;
+}
+.card__meta{
+  margin:0; font-size:11.5px; letter-spacing:.14em;
+  font-weight:400; text-transform:uppercase; color:var(--gold);
+}
+.card__title{
+  margin:0; font-family:Georgia,"Times New Roman",serif;
+  font-size:20px; font-weight:400; line-height:1.35;
+}
+.card__desc{
+  margin:0; font-size:15px; font-weight:300; color:#d6cdc0;
+  flex:1; line-height:1.75; white-space:pre-line;
+}
+.muted{color:var(--dim)}
+.audio-box{border-top:1px dashed var(--line); padding-top:13px}
+.audio-box__label{
+  display:flex; align-items:center; gap:6px; font-size:11px;
+  letter-spacing:.14em; text-transform:uppercase; font-weight:400;
+  color:var(--muted); margin-bottom:9px;
+}
+audio{width:100%; height:38px; accent-color:var(--gold)}
+.audio-empty{font-size:13px; color:var(--dim); font-style:italic; margin:0}
+.credits{
+  margin-top:54px; padding-top:34px;
+  border-top:1px solid var(--line); animation:fade .5s ease both;
+}
+.credits__title{
+  margin:0 0 22px; font-family:Georgia,"Times New Roman",serif;
+  font-size:12.5px; letter-spacing:.26em; text-transform:uppercase;
+  color:var(--gold); font-weight:400; display:flex; align-items:center; gap:12px;
+}
+.credits__title::before, .credits__title::after{
+  content:""; flex:1; height:1px; background:var(--line);
+}
+.credits__grid{
+  display:grid; gap:16px;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+}
+.credits__item{
+  padding:16px 20px; border:1px solid var(--line); border-radius:14px;
+  background:linear-gradient(180deg,var(--panel),var(--panel-2));
+  transition:border-color .25s, transform .25s;
+}
+.credits__item:hover{border-color:#4a3f2e; transform:translateY(-2px)}
+.credits__role{
+  margin:0 0 5px; font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; font-weight:400; color:var(--muted);
+}
+.credits__name{
+  margin:0; font-family:Georgia,"Times New Roman",serif;
+  font-size:17px; font-weight:400; color:var(--text);
+}
+.site-footer{
+  display:flex; align-items:center; justify-content:center;
+  flex-wrap:wrap; gap:14px; padding:22px 28px;
+  border-top:1px solid var(--line);
+  color:var(--dim); font-size:13.5px;
+}
+.site-footer p{margin:0}
+@media (max-width:880px){
+  .burger{display:block}
+  .nav{
+    position:absolute; top:100%; left:0; right:0;
+    flex-direction:column; gap:4px; padding:12px;
+    background:var(--panel); border-bottom:1px solid var(--line);
+    display:none;
+  }
+  .nav.open{display:flex}
+  .site-header{padding:12px 18px}
+  main{padding:26px 18px 60px}
+  .site-footer{padding:20px 18px; text-align:center}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="logo" href="#home">
+    <span class="logo__mark">◈</span>
+    <span>Дом-музей <b>п. Николаевка</b></span>
+  </a>
+  <button class="burger" id="burger" aria-label="Меню" aria-expanded="false">☰</button>
+  <nav class="nav" id="nav" aria-label="Основная навигация"></nav>
+</header>
+
+<main id="app"></main>
+
+<footer class="site-footer">
+  <p>© 2026 Дом-музей п. Николаевка · Виртуальный тур</p>
+</footer>
+
+<script>
+const DATA = {
+  pages: [
+    {
+      id: "home",
+      nav: "Главная",
+      title: "Дом-музей п. Николаевка",
+      lead: "Пять залов — пять эпох и ремёсел. Выберите зал, чтобы увидеть экспонаты, прочитать описания и послушать аудиогид.",
+      exhibits: [
+        { id:"hall-black",  icon:"🕯️", image:"files/img/Прихожка (Черная комната).jpg",
+          title:"Прихожка (Чёрная Комната)", meta:"Зал I",
+          description:"Зал ретро и винтажных вещей.", href:"#medieval" },
+        { id:"hall-small",  icon:"🪑", image:"files/img/малый зал.jpg",
+          title:"Малый зал", meta:"Зал II",
+          description:"Уютный зал крестьянского и городского быта: мебель, инструменты, предметы домашнего труда.", href:"#ancient" },
+        { id:"hall-crafts", icon:"🛠️", image:"files/img/Лавка мастеров.jpg",
+          title:"Лавка мастеров", meta:"Зал III",
+          description:"Собрание ремесленных изделий и предметов восточного искусства.", href:"#orient" },
+        { id:"hall-war",    icon:"🎖️", image:"files/img/Зал ВОВ и Советского прошлого.jpg",
+          title:"Зал Великой Отечественной Войны и Советского прошлого", meta:"Зал IV",
+          description:"Память о войне и советской эпохе: документы, фотографии, предметы быта и искусства XX века.", href:"#modern" },
+        { id:"hall-white",  icon:"🖼️", image:"files/img/белая гостиница.jpg",
+          title:"Белый зал", meta:"Зал V",
+          description:"Светлый зал живописи: портрет, пейзаж и натюрморт XVII–XIX веков из собрания музея.", href:"#painting" }
+      ]
+    },
+    {
+      id: "medieval",
+      nav: "Прихожка",
+      title: "Прихожка «Чёрная комната»",
+      lead: "Эпоха рыцарей, монастырских скрипториев и византийских мастеров. Предметы веры, войны и повседневного быта.",
+      exhibits: [
+        { id:"m1", icon:"⚔️", image:"files/img/опр.jpg",       title:"Ассамбляж.", meta:"", description:"", audio:"" },
+        { id:"m2", icon:"📖", image:"files/img/пластинки.jpg", title:"Гримпластинки", meta:"", description:"", audio:"" },
+        { id:"m3", icon:"💾", image:"files/img/ади.jpg",       title:"Аудиокассеты и компьютерные дискеты.", meta:"", description:"", audio:"" }
+      ]
+    },
+    {
+      id: "ancient",
+      nav: "Малый зал",
+      title: "Малый зал",
+      lead: "Крестьянский и городской быт: мебель, инструменты, предметы домашнего труда.",
+      exhibits: [
+        { id:"a4", icon:"🗄️", image:"files/img/gold.jpg", title:"Шкаф.",
+          meta:"Западная Европа, Кёнигсберг · 1850–1914 гг.",
+          description:"Дерево, резьба, стекло. Поступление: дар Натальи Журкиной.\n\nМассивный трёхдверный буфет в стиле ренессанс. Центральная секция застеклена и служила витриной для фарфора и хрусталя. Боковые дверцы глухие, украшены резными розетками. Особенность предмета — точёные опоры в виде львиных лап, характерные для парадной мебели второй половины XIX — начала XX века. Фасад декорирован ручной резьбой с растительным орнаментом.\n\nИзготовлен в Кёнигсберге (ныне Калининград) в период 1850–1914 годов. Передан в дар музею Натальей Журкиной. Проделал долгий путь из Калининграда на Дальний Восток и ныне представлен в экспозиции музея.",
+          audio:"" },
+        { id:"a5", icon:"⚖️", image:"files/img/sixseven.jpg", title:"Ручной пружинный безмен (кантарь)",
+          meta:"Российская империя · XIX — начало XX века",
+          description:"Классический ручной пружинный безмен (по-другому кантарь). Состоит из массивного круглого корпуса с верхним подвесным кольцом и двумя крюками: верхним (для фиксации) и нижним (для груза). Внутри — пружина со стрелкой, на внутренней стороне корпуса закреплена изогнутая латунная шкала с насечками и цифрами.\n\nПринцип действия:\nПри подвешивании груза пружина сжимается, и стрелка указывает массу на шкале. Градуировка — в пудах и фунтах (реже в килограммах), по системе мер, действовавшей в Российской империи до 1918 года.\n\nИсторико-бытовое значение:\nБезмены были незаменимы в торговле, на складах и в крестьянских хозяйствах. Они компактны, прочны и просты в использовании, позволяли взвешивать грузы до 10 пудов и более.",
+          audio:"" },
+        { id:"a6", icon:"🍳", image:"files/img/chad.jpg", title:"Чапельник (сковородник)",
+          meta:"Россия · XIX — начало XX века",
+          description:"Перед вами — чапельник, или сковородник. Главная задача этого нехитрого инструмента — удерживать раскалённую сковороду в русской печи.\n\nОбратите внимание на форму металлического наконечника: он изогнут в виде крюка с небольшим «язычком». Такая конструкция позволяла надёжно захватывать сковороду за ушко и манипулировать ею внутри печи, не рискуя уронить. Длинная деревянная ручка берегла руки хозяйки от жара.",
+          audio:"" },
+        { id:"a7", icon:"🥾", image:"files/img/boots.jpg", title:"Сапожная лапа",
+          meta:"Россия · XIX — начало XX века",
+          description:"Перед вами сапожная лапа, верный спутник каждого сапожника. Её задача — удерживать обувь во время работы: шитья, прибивки подошвы, правки.\n\nОбратите внимание на форму: каплевидная площадка удобна для надевания обуви, ребро жёсткости выдерживало нагрузки, а широкое основание не давало инструменту опрокинуться.",
+          audio:"" },
+        { id:"a9", icon:"🪮", image:"files/img/чесалка.jpg", title:"Чесалка",
+          meta:"Россия · XIX — начало XX века",
+          description:"Массивная деревянная чесалка в виде гребня с длинными редкими зубьями и фигурной рукоятью. Зубья вырезаны вручную, с равным шагом. Поверхность тёмная, со следами длительного использования.\n\nПринцип действия:\nШерсть накладывали на зубья и прочёсывали, удаляя комки и сор. Полученную однородную массу использовали для прядения.",
+          audio:"" }
+      ]
+    },
+    {
+      id: "orient",
+      nav: "Лавка мастеров",
+      title: "Лавка мастеров",
+      lead: "Собрание ремесленных изделий и предметов восточного искусства: керамика, бронза, шёлк, каллиграфия.",
+      exhibits: [
+        { id:"o1", icon:"🐉", image:"files/img/выв.jpg", title:"Славянские дети.", meta:"", description:"", audio:"" },
+        { id:"o2", icon:"🎎", image:"files/img/мри.jpg", title:"Уютный городок.",  meta:"", description:"", audio:"" },
+        { id:"o3", icon:"🪔", image:"files/img/иви.jpg", title:"Домик гнома-садовника.", meta:"", description:"", audio:"" }
+      ]
+    },
+    {
+      id: "modern",
+      nav: "Зал ВОВ",
+      title: "Зал Великой Отечественной Войны и Советского прошлого",
+      lead: "Память о войне и советской эпохе: фотографии, предметы быта и искусства XX века.",
+      exhibits: [
+        { id:"n1", icon:"🎨", image:"files/img/Картина.jpg", title:"Картина «Мальчик за партой».", meta:"", description:"", audio:"" },
+        { id:"n2", icon:"💡", image:"files/img/Медали.jpg",  title:"Медали / значки со времён войны.", meta:"", description:"", audio:"" },
+        { id:"n3", icon:"🗿", image:"files/img/окак.jpg",    title:"Радиола.", meta:"", description:"", audio:"" }
+      ]
+    },
+    {
+      id: "painting",
+      nav: "Белый зал",
+      title: "Белый зал",
+      lead: "Светлый зал живописи: портреты, пейзажи и натюрморты.",
+      exhibits: [
+        { id:"p1", icon:"🖼️", image:"files/img/Картина2.jpg", title:"Картина «Тихий вечер».", meta:"", description:"", audio:"" },
+        { id:"p2", icon:"🌊", image:"files/img/Цапля.jpg",    title:"Цапля из запчастей.",   meta:"", description:"", audio:"" },
+        { id:"p3", icon:"💐", image:"files/img/Ансамбль.jpg", title:"Стальной ансамбль",     meta:"", description:"", audio:"" }
+      ]
+    }
+  ]
+};
+
+const CREDITS = [
+  { role: "Автор идеи",              name: "Лидия Мартынова" },
+  { role: "Разработчик-программист", name: "Артур Юрченко" },
+  { role: "Дизайнер",                name: "Андрей Ефисов" },
+  { role: "Помощник программиста",   name: "Савелий Буцкий" }
+];
+
+const app    = document.getElementById("app");
+const navEl  = document.getElementById("nav");
+const burger = document.getElementById("burger");
+
+function esc(str) {
+  return String(str ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+function safeIcon(icon) {
+  return String(icon || "🖼️").replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+}
+function srcUrl(path) {
+  return String(path).split("/").map(encodeURIComponent).join("/");
+}
+function currentPageId() {
+  const id = decodeURIComponent(location.hash.replace(/^#/, ""));
+  return DATA.pages.some(p => p.id === id) ? id : DATA.pages[0].id;
+}
+
+function renderNav() {
+  navEl.innerHTML = DATA.pages
+    .map(p => `<a href="#${p.id}" data-nav="${p.id}">${esc(p.nav)}</a>`)
+    .join("");
+}
+
+function exhibitCard(ex) {
+  const desc = String(ex.description ?? "").trim();
+  const audio = String(ex.audio ?? "").trim();
+  const image = String(ex.image ?? "").trim();
+  const hasAudio = audio.length > 0;
+  const hasImage = image.length > 0;
+
+  const visual = hasImage
+    ? `<img src="${esc(srcUrl(image))}" alt="${esc(ex.title)}" loading="lazy"
+            onerror="this.replaceWith(document.createTextNode('${safeIcon(ex.icon)}'))">`
+    : (ex.icon || "🖼️");
+
+  return `
+    <article class="card">
+      <div class="card__visual" aria-hidden="${hasImage ? "false" : "true"}">${visual}</div>
+      <div class="card__body">
+        <p class="card__meta">${esc(ex.meta)}</p>
+        <h2 class="card__title">${esc(ex.title)}</h2>
+        <p class="card__desc">${desc ? esc(desc) : '<span class="muted">Описание отсутствует.</span>'}</p>
+        <div class="audio-box">
+          <div class="audio-box__label">🎧 Аудиогид</div>
+          ${hasAudio
+            ? `<audio controls preload="none" src="${esc(srcUrl(audio))}"></audio>`
+            : `<p class="audio-empty">Аудиогид не добавлен.</p>`}
+        </div>
+      </div>
+    </article>`;
+}
+
+function hallCard(hall) {
+  const image = String(hall.image ?? "").trim();
+  const hasImage = image.length > 0;
+  const visual = hasImage
+    ? `<img src="${esc(srcUrl(image))}" alt="${esc(hall.title)}" loading="lazy"
+            onerror="this.replaceWith(document.createTextNode('${safeIcon(hall.icon || "🏛️")}'))">`
+    : (hall.icon || "🏛️");
+  return `
+    <a class="card card--hall" href="${esc(hall.href)}">
+      <div class="card__visual" aria-hidden="${hasImage ? "false" : "true"}">${visual}</div>
+      <div class="card__body">
+        <p class="card__meta">${esc(hall.meta || "")}</p>
+        <h2 class="card__title">${esc(hall.title)}</h2>
+        <p class="card__desc">${esc(hall.description)}</p>
+        <span class="card__cta">Перейти в зал →</span>
+      </div>
+    </a>`;
+}
+
+function creditsBlock() {
+  return `
+    <section class="credits" aria-label="Над проектом работали">
+      <h2 class="credits__title">Над проектом работали</h2>
+      <div class="credits__grid">
+        ${CREDITS.map(c => `
+          <div class="credits__item">
+            <p class="credits__role">${esc(c.role)}</p>
+            <p class="credits__name">${esc(c.name)}</p>
+          </div>`).join("")}
+      </div>
+    </section>`;
+}
+
+function render(scrollTop = false) {
+  const id = currentPageId();
+  const page = DATA.pages.find(p => p.id === id);
+
+  navEl.querySelectorAll("a").forEach(a => {
+    a.classList.toggle("active", a.dataset.nav === id);
+  });
+
+  const isHome = page.id === "home";
+  const cardsHTML = isHome
+    ? page.exhibits.map(hallCard).join("")
+    : page.exhibits.map(exhibitCard).join("");
+
+  app.innerHTML = `
+    <section class="page-hero">
+      <h1>${esc(page.title)}</h1>
+      <p>${esc(page.lead)}</p>
+    </section>
+    <div class="grid">${cardsHTML}</div>
+    ${isHome ? creditsBlock() : ""}`;
+
+  document.title = page.title + " — Дом-музей п. Николаевка";
+  if (scrollTop) window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+burger.addEventListener("click", () => {
+  const open = navEl.classList.toggle("open");
+  burger.setAttribute("aria-expanded", String(open));
+});
+navEl.addEventListener("click", e => {
+  if (e.target.tagName === "A") {
+    navEl.classList.remove("open");
+    burger.setAttribute("aria-expanded", "false");
+  }
+});
+window.addEventListener("hashchange", () => render(true));
+
+renderNav();
+render(true);
+</script>
+</body>
+</html>
